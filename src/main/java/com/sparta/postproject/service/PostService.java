@@ -1,9 +1,10 @@
 package com.sparta.postproject.service;
 
-import com.sparta.postproject.dto.PostRequestDto;
+import com.sparta.postproject.dto.*;
 import com.sparta.postproject.entity.Post;
 import com.sparta.postproject.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,36 +17,53 @@ public class PostService {
     private final PostRepository postRepository;
 
     @Transactional
-    public Post createPost(PostRequestDto requestDto) {
+    public ResponseDto createPost(PostRequestDto requestDto) {
         Post post = new Post(requestDto);
         postRepository.save(post);
-        return post;
+        return new ResponseDto("정상등록 되었습니다.", HttpStatus.OK.value());
     }
 
     @Transactional(readOnly = true)
-    public List<Post> getPost() {
-        return postRepository.findAllByOrderByModifiedAtDesc();
+    public PostListResponseDto getPost() {
+        PostListResponseDto postListResponseDto = new PostListResponseDto();
+        List<Post> posts = postRepository.findAllByOrderByModifiedAtDesc();
+        for (Post post : posts) {
+            postListResponseDto.addPost(new PostResponseDto(post));
+        }
+        return postListResponseDto;
     }
 
     @Transactional
-    public Optional<Post> getDetailPost(Long id, PostRequestDto requestDto) {
+    public PostResponseDto getDetailPost(Long id) {
         Post post = postRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
         );
-        return postRepository.findById(id);
+        return new PostResponseDto(post);
     }
     @Transactional
-    public Long updatePost(Long id, PostRequestDto requestDto) {
-        Post post = postRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
+    public ResponseDto updatePost(Long id, PostRequestDto requestDto) {
+        Post post = postRepository.findByIdAndPassword(id, requestDto.getPassword()).orElseThrow(
+                () -> new IllegalArgumentException("패스워드가 틀렸습니다.")
         );
     post.update(requestDto);
-    return post.getId();
+    return new ResponseDto("수정이 완료되었습니다.", HttpStatus.OK.value());
     }
 
+//    @Transactional
+//    public Long deletePost(Long id, String username, String password) {
+//        postRepository.findByIdAndUsernameAndPassword(id, username, password).orElseThrow(
+//                () -> new IllegalArgumentException("아이디/패스워드가 틀렸습니다.")
+//        );
+//        postRepository.deleteById(id);
+//        return id;
+//    }
+
     @Transactional
-    public Long deletePost(Long id) {
+    public ResponseDto deletePost(Long id, PostDeleteRequestDto requestDto) {
+        postRepository.findByIdAndPassword(id, requestDto.getPassword()).orElseThrow(
+                () -> new IllegalArgumentException("패스워드가 틀렸습니다.")
+        );
         postRepository.deleteById(id);
-        return id;
+        return new ResponseDto("삭제가 완료되었습니다.", HttpStatus.OK.value());
     }
 }

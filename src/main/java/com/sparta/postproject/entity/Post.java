@@ -1,5 +1,6 @@
 package com.sparta.postproject.entity;
 
+import com.sparta.postproject.dto.PostDeleteRequestDto;
 import com.sparta.postproject.dto.PostRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,6 +33,10 @@ public class Post extends Timestamped {
         this.password = requestDto.getPassword();
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
+    }
+
+    public Post(PostDeleteRequestDto requestDto) {
+        this.password = requestDto.getPassword();
     }
 
     public void update(PostRequestDto requestDto) {
