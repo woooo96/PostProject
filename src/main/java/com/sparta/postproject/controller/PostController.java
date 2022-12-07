@@ -5,50 +5,45 @@ import com.sparta.postproject.entity.Post;
 import com.sparta.postproject.repository.PostRepository;
 import com.sparta.postproject.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class PostController {
 
     private final PostService postService;
 
-//    @GetMapping("/")
-//    public ModelAndView home() { return new ModelAndView("main"); }
-
-    @PostMapping("/api/post")
-    public ResponseDto createPost(@RequestBody PostRequestDto requestDto) {
-        return postService.createPost(requestDto);
+    @PostMapping("/post")
+    public PostResponseDto createPost(@RequestBody PostRequestDto requestDto, HttpServletRequest request) {
+        return postService.createPost(requestDto, request);
     }
 
-    @GetMapping("/api/post")
+    @GetMapping("/post")
     public PostListResponseDto getPost() {
         return postService.getPost();
     }
 
-    @GetMapping("/api/post/{id}")
+    @GetMapping("/post/{id}")
     public PostResponseDto getDetailPost(@PathVariable long id) {
         return postService.getDetailPost(id);
     }
 
-    @PutMapping("/api/post/{id}")
-    public ResponseDto updatePost(@PathVariable Long id, @RequestBody PostRequestDto requestDto) {
-        return postService.updatePost(id, requestDto);
+    @PutMapping("/post/{id}")
+    public PostResponseDto updatePost(@PathVariable Long id, @RequestBody PostRequestDto requestDto, HttpServletRequest request) {
+
+        return postService.updatePost(id, requestDto, request);
     }
 
-//    @ResponseBody
-//    @PostMapping("api/post/{id}")
-//    public Long DeletePost(@PathVariable Long id, @RequestParam String username, @RequestParam String password) {
-//        return postService.deletePost(id, username, password);
-//    }
-
-    @DeleteMapping("/api/post/{id}")
-    public ResponseDto DeletePost(@PathVariable Long id, @RequestBody PostDeleteRequestDto requestDto) {
-        return postService.deletePost(id, requestDto);
+    @DeleteMapping("/post/{id}")
+    public ResponseDto DeletePost(@PathVariable Long id, HttpServletRequest request) {
+        return postService.deletePost(id, request);
     }
 
 
