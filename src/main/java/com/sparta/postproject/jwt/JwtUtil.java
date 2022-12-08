@@ -21,15 +21,15 @@ import java.util.Date;
 @Component
 @RequiredArgsConstructor
 public class JwtUtil {
-    public static final String AUTHORIZATION_HEADER = "Authorization";
+    public static final String AUTHORIZATION_HEADER = "Authorization";  //인증 헤더 키값
     public static final String AUTHORIZATION_KEY = "auth";
-    private static final String BEARER_PREFIX = "Bearer ";
-    private static final long TOKEN_TIME = 60 * 60 * 1000L;
+    private static final String BEARER_PREFIX = "Bearer ";  //Bearer 로 시작하는 토큰을 만들기 위한 상수
+    private static final long TOKEN_TIME = 60 * 60 * 1000L; //Toekn 유효시간 설정을 위한 상수
 
     @Value("${jwt.secret.key}")
     private String secretKey;
     private Key key;
-    private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
+    private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256; //어떠한 알고리즘으로 암호화 할것인지 선택
 
     @PostConstruct
     public void init() {
@@ -39,9 +39,9 @@ public class JwtUtil {
 
     // header 토큰을 가져오기
     public String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);   //getHeader에 AUTHORIZATION_HEADER상수로 설정한 Authorization 부분 추출
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
-            return bearerToken.substring(7);
+            return bearerToken.substring(7);    //가져온 키 값에서 BEARER_PREFIX+공백을 제외한 jwt토큰값 추출
         }
         return null;
     }
@@ -52,11 +52,11 @@ public class JwtUtil {
 
         return BEARER_PREFIX +
                 Jwts.builder()
-                        .setSubject(username)
+                        .setSubject(username)   //subject (username) 설정
                         .claim(AUTHORIZATION_KEY, role)
-                        .setExpiration(new Date(date.getTime() + TOKEN_TIME))
+                        .setExpiration(new Date(date.getTime() + TOKEN_TIME))   //토큰 유효시간 설정
                         .setIssuedAt(date)
-                        .signWith(key, signatureAlgorithm)
+                        .signWith(key, signatureAlgorithm)  //토큰 암호화
                         .compact();
     }
 

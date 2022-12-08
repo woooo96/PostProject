@@ -19,9 +19,11 @@ public class Comment extends Timestamped{
     @Column(nullable = false)
     private String comment;
 
+    //post 엔티티 ManyToOne으로 양방향 연관관계 형성
     @ManyToOne
     private Post post;
 
+    //member 엔티티 ManyToOne으로 단방향 연관관계 형성
     @ManyToOne
     @JoinColumn(name="memberId", nullable = false)
     private Member member;

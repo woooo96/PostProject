@@ -55,14 +55,15 @@ public class MemberService {
         String username = requestDto.getUsername();
         String password = requestDto.getPassword();
 
-        //입력받은 requestDto
+        //입력받은 requestDto에서 username을 검색해서 repository에 존재하지 않을경우 익셉션 발생
         Member member = memberRepository.findByUsername(username).orElseThrow(
                 () -> new IllegalArgumentException("등록된 사용자가 없습니다")
         );
-
+        //member 엔티티에 저장된 password와 입력받은 password가 다를경우 익셉션 발생
         if(!member.getPassword().equals(password)) {
             throw new IllegalArgumentException("패스워드가 일치하지 않습니다.");
         }
+        //로그인이 성공할 경우 response로 헤더에 jwt토큰 생성하여 반환
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(member.getUsername(), member.getUsertype()));
         return new ResponseDto("로그인 되었습니다.", HttpStatus.OK.value());
     }

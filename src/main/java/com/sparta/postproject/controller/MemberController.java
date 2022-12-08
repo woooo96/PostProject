@@ -22,11 +22,13 @@ import javax.validation.Valid;
 public class MemberController {
     private final MemberService memberService;
 
+    //회원가입하기 (@RequestBody로 입력받은 값을 @Valid 어노테이션으로 id/passwd 패턴 확인)
     @PostMapping("/signup")
     public ResponseDto createMember(@RequestBody @Valid MemberRequestDto requestDto) {
         return memberService.createMember(requestDto);
     }
 
+    //로그인하기
     @PostMapping("/login")
     public ResponseDto loginMember(@RequestBody LoginRequestDto requestDto, HttpServletResponse response) {
         return memberService.loginMember(requestDto, response);

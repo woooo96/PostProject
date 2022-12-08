@@ -18,16 +18,19 @@ public class CommentController {
 
     private final CommentService commentService;
 
+    //코맨트 작성하기
     @PostMapping("/{id}/comment")
     public CommentResponseDto createComment(@PathVariable Long id, HttpServletRequest request, @RequestBody CommentRequestDto requestDto) {
         return commentService.createComment(id, request, requestDto);
     }
 
+    //코맨트 수정하기
     @PutMapping("/comment/{id}")
     public CommentResponseDto updateComment(@PathVariable Long id, HttpServletRequest request, @RequestBody CommentRequestDto requestDto) {
         return commentService.updateComment(id, request, requestDto);
     }
 
+    //코맨트 삭제하기
     @DeleteMapping("/comment/{id}")
     public ResponseDto deleteComment(@PathVariable Long id, HttpServletRequest request) {
         return commentService.deleteComment(id, request);

@@ -1,6 +1,5 @@
 package com.sparta.postproject.entity;
 
-import com.sparta.postproject.dto.PostDeleteRequestDto;
 import com.sparta.postproject.dto.PostRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,10 +29,12 @@ public class Post extends Timestamped {
     @Column(nullable = false)
     private String contents;
 
+    //member엔티티와 ManyToOne으로 단방향 연관관계 형성
     @ManyToOne
     @JoinColumn(name="memberId", nullable = false)
     private Member member;
 
+    //Comment 엔티티와 OneToMany 양방향 연관관계 형성
     @OneToMany(mappedBy="post", cascade = CascadeType.REMOVE)
     private List<Comment> commentList = new ArrayList<>();
 
