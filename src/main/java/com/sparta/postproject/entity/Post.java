@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@Getter             //
-@Entity             //
+@Getter
+@Entity
 @NoArgsConstructor  //파라미터가 없는 기본 생성자생성해줌.
 public class Post extends Timestamped {
     @Id

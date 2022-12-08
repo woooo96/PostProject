@@ -57,7 +57,7 @@ public class PostService {
             CommentListResponseDto commentListResponseDto = new CommentListResponseDto();
             List<Comment> comments = commentRepository.findByPost_Id(post.getId());
             for (Comment comment : comments) {
-                commentListResponseDto.addComment(new CommentResponseDto(comment,username));
+                commentListResponseDto.addComment(new CommentResponseDto(comment,comment.getMember().getUsername()));
             }
             postListResponseDto.addPost(new PostResponseDto(post, username, commentListResponseDto));
         }
@@ -71,7 +71,7 @@ public class PostService {
         CommentListResponseDto commentListResponseDto = new CommentListResponseDto();
         List<Comment> comments = commentRepository.findByPost_Id(post.getId());
         for(Comment comment : comments) {
-            commentListResponseDto.addComment(new CommentResponseDto(comment, username));
+             commentListResponseDto.addComment(new CommentResponseDto(comment, comment.getMember().getUsername()));
         }
         return new PostResponseDto(post, username, commentListResponseDto);
     }
